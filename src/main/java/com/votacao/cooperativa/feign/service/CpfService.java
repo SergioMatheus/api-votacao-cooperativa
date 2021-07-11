@@ -1,13 +1,16 @@
 package com.votacao.cooperativa.feign.service;
 
 import com.votacao.cooperativa.feign.controller.CpfConsultaService;
+import feign.FeignException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 @AllArgsConstructor
 public class CpfService {
 
-    private CpfConsultaService consultaService;
+    private final CpfConsultaService consultaService;
 
     private static final String ABLE_TO_VOTE = "ABLE_TO_VOTE";
 
@@ -21,11 +24,11 @@ public class CpfService {
      * @return - boolean
      */
     public boolean validaCpfAssociado(String cpf) {
-        String status = consultaService.validaCpf(cpf);
-
-        if (ABLE_TO_VOTE.equals(status)) {
+        try {
+            consultaService.validaCpf(cpf);
             return Boolean.TRUE;
+        } catch (FeignException feignException) {
+            return Boolean.FALSE;
         }
-        return Boolean.FALSE;
     }
 }

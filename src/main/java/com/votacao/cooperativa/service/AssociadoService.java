@@ -3,6 +3,7 @@ package com.votacao.cooperativa.service;
 import com.votacao.cooperativa.dto.AssociadoDTO;
 import com.votacao.cooperativa.feign.service.CpfService;
 import com.votacao.cooperativa.repository.AssociadoRepository;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,17 +11,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@AllArgsConstructor
 public class AssociadoService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AssociadoService.class);
     private final AssociadoRepository repository;
     private final CpfService validaCPFClient;
-
-    @Autowired
-    public AssociadoService(AssociadoRepository repository, CpfService validaCPFClient) {
-        this.repository = repository;
-        this.validaCPFClient = validaCPFClient;
-    }
 
     /**
      * Realiza a validacao se o associado ja votou na pauta informada pelo seu ID.

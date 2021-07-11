@@ -55,7 +55,7 @@ public class VotacaoService {
         } else if (!associadoService.isAssociadoPodeVotar(dto.getCpfAssociado())) {
 
             LOGGER.error("Associado nao esta habilitado para votar {}", dto.getCpfAssociado());
-            throw new VotoInvalidoException("Não é possível votar mais de 1 vez na mesma pauta");
+            throw new VotoInvalidoException("Associado nao esta habilitado para votar");
 
         } else if (!associadoService.isValidaParticipacaoAssociadoVotacao(dto.getCpfAssociado(), dto.getIdPauta())) {
 
