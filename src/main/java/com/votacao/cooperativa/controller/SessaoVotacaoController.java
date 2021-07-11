@@ -2,6 +2,7 @@ package com.votacao.cooperativa.controller;
 
 import com.votacao.cooperativa.dto.SessaoVotacaoAbrirDTO;
 import com.votacao.cooperativa.dto.SessaoVotacaoDTO;
+import com.votacao.cooperativa.dto.SessaoVotacaoEncerrarDTO;
 import com.votacao.cooperativa.service.SessaoVotacaoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -38,7 +39,14 @@ public class SessaoVotacaoController {
         SessaoVotacaoDTO dto = service.abrirSessaoVotacao(sessaoVotacaoAbrirDTO);
         LOGGER.debug("Sessao para votacao da pauta  id = {} aberta", sessaoVotacaoAbrirDTO.getIdPauta());
         LOGGER.debug("Hora de inicio sessao para votacao {}", dto.getDataHoraInicio());
-        LOGGER.debug("Hora de encerramento sessao para votacao {}", dto.getDataHoraFim());
+        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
+    }
+
+    @ApiOperation(value = "Encerrar uma sessão de votação")
+    @PostMapping(value = "/encerrar-sessao")
+    public ResponseEntity<SessaoVotacaoDTO> encerrarSessaoVotacao(@Valid @RequestBody SessaoVotacaoEncerrarDTO sessaoVotacaoEncerrarDTO) {
+        SessaoVotacaoDTO dto = service.encerraoSessaoVotacao(sessaoVotacaoEncerrarDTO);
+        LOGGER.debug("Sessao Encerrada, id = {}", sessaoVotacaoEncerrarDTO.getIdSessao());
         return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 }

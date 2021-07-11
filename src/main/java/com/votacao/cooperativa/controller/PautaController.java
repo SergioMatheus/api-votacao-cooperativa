@@ -40,6 +40,6 @@ public class PautaController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<PautaDTO> buscarPautaPeloID(@PathVariable("id") Integer id) {
         LOGGER.debug("Buscando a pauta pelo ID = {}", id);
-        return ResponseEntity.ok(service.buscarPautaPeloOID(id));
+        return ResponseEntity.ok(service.buscarPautaPeloID(id));
     }
 }

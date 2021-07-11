@@ -2,6 +2,7 @@ package com.votacao.cooperativa.service;
 
 import com.votacao.cooperativa.dto.SessaoVotacaoAbrirDTO;
 import com.votacao.cooperativa.dto.SessaoVotacaoDTO;
+import com.votacao.cooperativa.dto.SessaoVotacaoEncerrarDTO;
 import com.votacao.cooperativa.entity.SessaoVotacao;
 import com.votacao.cooperativa.exception.NotFoundException;
 import com.votacao.cooperativa.repository.SessaoVotacaoRepository;
@@ -12,9 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class SessaoVotacaoService {
@@ -34,7 +33,6 @@ public class SessaoVotacaoService {
     /**
      * Se a sessao votacao é valida entao persiste os dados na base e inicia
      * a contagem para o encerramento da mesma.
-     *
      */
     @Transactional
     public SessaoVotacaoDTO abrirSessaoVotacao(SessaoVotacaoAbrirDTO sessaoVotacaoAbrirDTO) {
@@ -45,7 +43,6 @@ public class SessaoVotacaoService {
         SessaoVotacaoDTO dto = new SessaoVotacaoDTO(
                 null,
                 LocalDateTime.now(),
-                calcularTempo(sessaoVotacaoAbrirDTO.getTempo()),
                 Boolean.TRUE);
 
         return salvar(dto);
@@ -68,35 +65,17 @@ public class SessaoVotacaoService {
     }
 
     /**
-     * busca se ha sessoes em andamento, se houver, os dados sao retornados para o validador de tempo
-     *
-     * @return - List<@{@link SessaoVotacaoDTO}>
-     */
-    @Transactional(readOnly = true)
-    public List<SessaoVotacaoDTO> buscarSessaoesEmAndamento() {
-        LOGGER.debug("Buscando sessoes em andamento");
-        List<SessaoVotacaoDTO> list = repository.buscarTodasSessoesEmAndamento(Boolean.TRUE)
-                .stream()
-                .map(SessaoVotacaoDTO::toDTO)
-                .collect(Collectors.toList());
-
-        return list
-                .stream()
-                .filter(dto -> dto.getDataHoraFim().isBefore(LocalDateTime.now()))
-                .collect(Collectors.toList());
-    }
-
-    /**
      * Quando houver sessao de votacao com o tempo data hora fim expirado,
      * a flag ativo é setado como FALSE e persistido a alteracao na base de dados.
      *
-     * @param dto - @{@link SessaoVotacaoDTO}
+     * @param dto - @{@link SessaoVotacaoEncerrarDTO}
      */
     @Transactional
-    public void encerraoSessaoVotacao(SessaoVotacaoDTO dto) {
-        LOGGER.debug("Encerrando sessao com tempo de duracao expirado {}", dto.getId());
-        dto.setAtiva(Boolean.FALSE);
-        salvar(buscarSessaoVotacaoPeloOID(dto.getId()));
+    public SessaoVotacaoDTO encerraoSessaoVotacao(SessaoVotacaoEncerrarDTO dto) {
+        LOGGER.debug("Encerrando sessao com tempo de duracao expirado {}", dto.getIdSessao());
+        SessaoVotacaoDTO sessaoVotacaoEncerrada = buscarSessaoVotacaoPeloID(dto.getIdSessao());
+        sessaoVotacaoEncerrada.setAtiva(Boolean.FALSE);
+        return salvar(sessaoVotacaoEncerrada);
     }
 
     /**
@@ -104,7 +83,7 @@ public class SessaoVotacaoService {
      * @return - @{@link SessaoVotacaoDTO}
      */
     @Transactional(readOnly = true)
-    public SessaoVotacaoDTO buscarSessaoVotacaoPeloOID(Integer id) {
+    public SessaoVotacaoDTO buscarSessaoVotacaoPeloID(Integer id) {
         Optional<SessaoVotacao> optionalSessaoVotacao = repository.findById(id);
         if (!optionalSessaoVotacao.isPresent()) {
             LOGGER.error("Sessao de votacao nao localizada para o id {}", id);

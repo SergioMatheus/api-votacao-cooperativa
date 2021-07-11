@@ -10,10 +10,10 @@ import javax.validation.constraints.NotNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SessaoVotacaoAbrirDTO {
+public class SessaoVotacaoEncerrarDTO {
 
-    @ApiModelProperty(value = "ID da Pauta que se quer abrir sessão para votação")
-    @NotNull(message = "idPauta deve ser preenchido")
-    private Integer idPauta;
+    @ApiModelProperty(value = "ID da Sessão que deseja encerrar a votação")
+    @NotNull(message = "idSessao deve ser preenchido")
+    private Integer idSessao;
 
 }

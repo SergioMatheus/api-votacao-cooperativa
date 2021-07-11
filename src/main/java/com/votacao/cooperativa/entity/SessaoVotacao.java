@@ -24,9 +24,6 @@ public class SessaoVotacao {
     @Column(name = "data_hora_inicio")
     private LocalDateTime dataHoraInicio;
 
-    @Column(name = "data_hora_fim")
-    private LocalDateTime dataHoraFim;
-
     @Column(name = "status")
     private Boolean ativa;
 

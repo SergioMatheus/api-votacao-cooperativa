@@ -17,10 +17,10 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class PautaDTO {
 
-    @ApiModelProperty(value = "ID Pauta", required = true)
+    @ApiModelProperty(value = "ID Pauta")
     private Integer id;
 
-    @ApiModelProperty(value = "Descrição referente o que será votado")
+    @ApiModelProperty(value = "Descrição referente o que será votado", required = true)
     @NotBlank(message = "Descrição deve ser preenchido")
     private String descricao;
 

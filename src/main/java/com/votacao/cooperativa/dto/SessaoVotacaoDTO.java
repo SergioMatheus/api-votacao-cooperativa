@@ -23,9 +23,6 @@ public class SessaoVotacaoDTO {
     @ApiModelProperty(value = "Data Hora de início da sessão de votação aberta")
     private LocalDateTime dataHoraInicio;
 
-    @ApiModelProperty(value = "Data Hora de fim sessão de votação aberta")
-    private LocalDateTime dataHoraFim;
-
     @ApiModelProperty(value = "Status da sessão de votação aberta")
     private Boolean ativa;
 
@@ -34,7 +31,6 @@ public class SessaoVotacaoDTO {
         return SessaoVotacao.builder()
                 .id(dto.getId())
                 .dataHoraInicio(dto.getDataHoraInicio())
-                .dataHoraFim(dto.getDataHoraFim())
                 .ativa(dto.getAtiva())
                 .build();
     }
@@ -43,7 +39,6 @@ public class SessaoVotacaoDTO {
         return SessaoVotacaoDTO.builder()
                 .id(sessaoVotacao.getId())
                 .dataHoraInicio(sessaoVotacao.getDataHoraInicio())
-                .dataHoraFim(sessaoVotacao.getDataHoraFim())
                 .ativa(sessaoVotacao.getAtiva())
                 .build();
     }

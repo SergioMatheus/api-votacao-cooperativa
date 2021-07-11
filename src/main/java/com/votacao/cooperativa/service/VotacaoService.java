@@ -152,7 +152,7 @@ public class VotacaoService {
 
         if (isValidaSeDadosExistem(idPauta, idSessaoVotacao) && sessaoVotacaoService.isSessaoValidaParaContagem(idSessaoVotacao)) {
             LOGGER.debug("Construindo o objeto de retorno do resultado para idPauta = {}, idSessaoVotacao = {}", idPauta, idSessaoVotacao);
-            PautaDTO pautaDTO = pautaService.buscarPautaPeloOID(idPauta);
+            PautaDTO pautaDTO = pautaService.buscarPautaPeloID(idPauta);
             VotacaoDTO votacaoDTO = buscarResultadoVotacao(idPauta, idSessaoVotacao);
             return new ResultadoDTO(pautaDTO, votacaoDTO);
         }

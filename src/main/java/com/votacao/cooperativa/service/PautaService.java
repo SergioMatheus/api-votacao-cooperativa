@@ -39,7 +39,7 @@ public class PautaService {
      * @return - @{@link PautaDTO}
      */
     @Transactional(readOnly = true)
-    public PautaDTO buscarPautaPeloOID(Integer id) {
+    public PautaDTO buscarPautaPeloID(Integer id) {
         Optional<Pauta> pautaOptional = repository.findById(id);
 
         if (!pautaOptional.isPresent()) {
