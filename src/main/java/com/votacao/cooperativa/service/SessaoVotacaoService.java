@@ -71,7 +71,7 @@ public class SessaoVotacaoService {
      * @param dto - @{@link SessaoVotacaoEncerrarDTO}
      */
     @Transactional
-    public SessaoVotacaoDTO encerraoSessaoVotacao(SessaoVotacaoEncerrarDTO dto) {
+    public SessaoVotacaoDTO encerrarSessaoVotacao(SessaoVotacaoEncerrarDTO dto) {
         LOGGER.debug("Encerrando sessao com tempo de duracao expirado {}", dto.getIdSessao());
         SessaoVotacaoDTO sessaoVotacaoEncerrada = buscarSessaoVotacaoPeloID(dto.getIdSessao());
         sessaoVotacaoEncerrada.setAtiva(Boolean.FALSE);

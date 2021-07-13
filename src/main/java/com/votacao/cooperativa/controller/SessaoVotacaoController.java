@@ -3,7 +3,7 @@ package com.votacao.cooperativa.controller;
 import com.votacao.cooperativa.dto.SessaoVotacaoAbrirDTO;
 import com.votacao.cooperativa.dto.SessaoVotacaoDTO;
 import com.votacao.cooperativa.dto.SessaoVotacaoEncerrarDTO;
-import com.votacao.cooperativa.exception.SessoEncerradaException;
+import com.votacao.cooperativa.exception.SessaoEncerradaException;
 import com.votacao.cooperativa.producer.VotacaoFinalizeProducer;
 import com.votacao.cooperativa.service.SessaoVotacaoService;
 import io.swagger.annotations.Api;
@@ -51,12 +51,12 @@ public class SessaoVotacaoController {
     @PostMapping(value = "/encerrar-sessao")
     public ResponseEntity<SessaoVotacaoDTO> encerrarSessaoVotacao(@Valid @RequestBody SessaoVotacaoEncerrarDTO sessaoVotacaoEncerrarDTO) {
         if (service.isSessaoVotacaoValida(sessaoVotacaoEncerrarDTO.getIdSessao())) {
-            SessaoVotacaoDTO dto = service.encerraoSessaoVotacao(sessaoVotacaoEncerrarDTO);
+            SessaoVotacaoDTO dto = service.encerrarSessaoVotacao(sessaoVotacaoEncerrarDTO);
             votacaoFinalizeProducer.send(dto.toString());
             LOGGER.debug("Sessao Encerrada, id = {}", sessaoVotacaoEncerrarDTO.getIdSessao());
             return ResponseEntity.status(HttpStatus.CREATED).body(dto);
         } else {
-            throw new SessoEncerradaException("A sessão de votação já encontra-se encerrada.");
+            throw new SessaoEncerradaException("A sessão de votação já encontra-se encerrada.");
         }
     }
 }

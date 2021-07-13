@@ -4,7 +4,7 @@ import com.votacao.cooperativa.dto.*;
 import com.votacao.cooperativa.entity.Pauta;
 import com.votacao.cooperativa.entity.SessaoVotacao;
 import com.votacao.cooperativa.exception.NotFoundException;
-import com.votacao.cooperativa.exception.SessoEncerradaException;
+import com.votacao.cooperativa.exception.SessaoEncerradaException;
 import com.votacao.cooperativa.exception.VotoInvalidoException;
 import com.votacao.cooperativa.repository.VotacaoRepository;
 import org.slf4j.Logger;
@@ -40,7 +40,7 @@ public class VotacaoService {
      */
     @Transactional(readOnly = true)
     public boolean isValidaVoto(VotoDTO dto) {
-        LOGGER.debug("Validando os dados para voto idSessao = {}, idPauta = {}, idAssiciado = {}", dto.getIdSessaoVotacao(), dto.getIdPauta(), dto.getCpfAssociado());
+        LOGGER.debug("Validando os dados para voto idSessao = {}, idPauta = {}, idAssociado = {}", dto.getIdSessaoVotacao(), dto.getIdPauta(), dto.getCpfAssociado());
 
         if (!pautaService.isPautaValida(dto.getIdPauta())) {
 
@@ -50,7 +50,7 @@ public class VotacaoService {
         } else if (!sessaoVotacaoService.isSessaoVotacaoValida(dto.getIdSessaoVotacao())) {
 
             LOGGER.error("Tentativa de voto para sessao encerrada idSessaoVotacao {}", dto.getIdSessaoVotacao());
-            throw new SessoEncerradaException("Sessão de votação já encerrada");
+            throw new SessaoEncerradaException("Sessão de votação já encerrada");
 
         } else if (!associadoService.isAssociadoPodeVotar(dto.getCpfAssociado())) {
 
@@ -76,7 +76,7 @@ public class VotacaoService {
     @Transactional
     public String votar(VotoDTO dto) {
         if (isValidaVoto(dto)) {
-            LOGGER.debug("Dados validos para voto idSessao = {}, idPauta = {}, idAssiciado = {}", dto.getIdSessaoVotacao(), dto.getIdPauta(), dto.getCpfAssociado());
+            LOGGER.debug("Dados validos para voto idSessao = {}, idPauta = {}, idAssociado = {}", dto.getIdSessaoVotacao(), dto.getIdPauta(), dto.getCpfAssociado());
 
             VotacaoDTO votacaoDTO = new VotacaoDTO(null,
                     dto.getIdPauta(),
