@@ -3,6 +3,8 @@ package com.votacao.cooperativa.controller;
 import com.votacao.cooperativa.dto.SessaoVotacaoAbrirDTO;
 import com.votacao.cooperativa.dto.SessaoVotacaoDTO;
 import com.votacao.cooperativa.dto.SessaoVotacaoEncerrarDTO;
+import com.votacao.cooperativa.exception.SessoEncerradaException;
+import com.votacao.cooperativa.producer.VotacaoFinalizeProducer;
 import com.votacao.cooperativa.service.SessaoVotacaoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,9 +29,12 @@ public class SessaoVotacaoController {
 
     private final SessaoVotacaoService service;
 
+    private final VotacaoFinalizeProducer votacaoFinalizeProducer;
+
     @Autowired
-    public SessaoVotacaoController(SessaoVotacaoService service) {
+    public SessaoVotacaoController(SessaoVotacaoService service, VotacaoFinalizeProducer votacaoFinalizeProducer) {
         this.service = service;
+        this.votacaoFinalizeProducer = votacaoFinalizeProducer;
     }
 
     @ApiOperation(value = "Abrir uma sessão de votação, referente a determinada pauta")
@@ -45,8 +50,13 @@ public class SessaoVotacaoController {
     @ApiOperation(value = "Encerrar uma sessão de votação")
     @PostMapping(value = "/encerrar-sessao")
     public ResponseEntity<SessaoVotacaoDTO> encerrarSessaoVotacao(@Valid @RequestBody SessaoVotacaoEncerrarDTO sessaoVotacaoEncerrarDTO) {
-        SessaoVotacaoDTO dto = service.encerraoSessaoVotacao(sessaoVotacaoEncerrarDTO);
-        LOGGER.debug("Sessao Encerrada, id = {}", sessaoVotacaoEncerrarDTO.getIdSessao());
-        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
+        if (service.isSessaoVotacaoValida(sessaoVotacaoEncerrarDTO.getIdSessao())) {
+            SessaoVotacaoDTO dto = service.encerraoSessaoVotacao(sessaoVotacaoEncerrarDTO);
+            votacaoFinalizeProducer.send(dto.toString());
+            LOGGER.debug("Sessao Encerrada, id = {}", sessaoVotacaoEncerrarDTO.getIdSessao());
+            return ResponseEntity.status(HttpStatus.CREATED).body(dto);
+        } else {
+            throw new SessoEncerradaException("A sessão de votação já encontra-se encerrada.");
+        }
     }
 }

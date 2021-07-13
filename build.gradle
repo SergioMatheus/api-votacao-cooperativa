@@ -28,6 +28,7 @@ dependencies {
 	implementation group: 'org.springframework.plugin', name: 'spring-plugin-core', version: '1.2.0.RELEASE'
 	implementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
 	compileOnly 'org.projectlombok:lombok'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-amqp', version: '2.5.2'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'mysql:mysql-connector-java'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
