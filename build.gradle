@@ -6,7 +6,7 @@ plugins {
 
 group = 'com.votacao'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '12'
+sourceCompatibility = '8'
 
 configurations {
 	compileOnly {
